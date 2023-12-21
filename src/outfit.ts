@@ -94,6 +94,7 @@ export function chooseQuestOutfit(
     ifHave("offhand", $item`Elf Guard clipboard`, () => location.zone === "Crimbo23"),
     // eslint-disable-next-line libram/verify-constants
     ifHave("offhand", $item`Crimbuccaneer Lantern`, () => location.zone === "Crimbo23"),
+    ifHave("offhand", $item`carnivorous potted plant`, () => location.zone === "Crimbo23"),
     ifHave(
       "offhand",
       $item`cursed magnifying glass`,
