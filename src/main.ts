@@ -24,10 +24,10 @@ export function main(command?: string) {
 
   sinceKolmafiaRevision(27753);
 
-  set(`currentMood`, `crimbo`);
   const engine = new CrimboEngine(Tasks);
   engine.print();
 
+  set(`currentMood`, `crimbo`);
   const sessionStart = Session.current();
 
   withProperty("recoveryScript", "", () => {
