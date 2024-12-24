@@ -2,6 +2,7 @@ import { Args } from "grimoire-kolmafia";
 import {
   $slots,
   Session,
+  set,
   setDefaultMaximizeOptions,
   sinceKolmafiaRevision,
   withProperty,
@@ -23,6 +24,7 @@ export function main(command?: string) {
 
   sinceKolmafiaRevision(27753);
 
+  set(`currentMood`, `crimbo`);
   const engine = new CrimboEngine(Tasks);
   engine.print();
 
