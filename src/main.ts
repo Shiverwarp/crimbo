@@ -26,10 +26,9 @@ export function main(command?: string) {
 
   const engine = new CrimboEngine(Tasks);
   engine.print();
-
-  set(`currentMood`, `crimbo`);
   const sessionStart = Session.current();
 
+  set(`currentMood`, `crimbo`);
   withProperty("recoveryScript", "", () => {
     try {
       engine.run();
