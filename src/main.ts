@@ -1,3 +1,6 @@
+import { CrimboEngine } from "./engine";
+import { args, printh } from "./lib";
+import Tasks from "./tasks";
 import { Args } from "grimoire-kolmafia";
 import {
   $slots,
@@ -8,10 +11,6 @@ import {
   withProperty,
 } from "libram";
 
-import { CrimboEngine } from "./engine";
-import { args, printh } from "./lib";
-import Tasks from "./tasks";
-
 export function main(command?: string) {
   Args.fill(args, command);
 
@@ -20,7 +19,9 @@ export function main(command?: string) {
     return;
   }
 
-  setDefaultMaximizeOptions({ preventSlot: $slots`crown-of-thrones, buddy-bjorn` });
+  setDefaultMaximizeOptions({
+    preventSlot: $slots`crown-of-thrones, buddy-bjorn`,
+  });
 
   sinceKolmafiaRevision(28799); // First zone of the season added
 
@@ -28,7 +29,6 @@ export function main(command?: string) {
   engine.print();
   const sessionStart = Session.current();
 
-  set(`currentMood`, `crimbo`);
   withProperty("recoveryScript", "", () => {
     try {
       engine.run();
