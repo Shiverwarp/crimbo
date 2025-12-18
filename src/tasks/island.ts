@@ -1,13 +1,10 @@
 import { CrimboStrategy, CrimboTask } from "../engine";
+import { getLocation } from "../lib";
 import Macro from "../macro";
 import { islandOutfit } from "../outfit";
 import { OutfitSpec, Quest } from "grimoire-kolmafia";
-import { Item, Location, Skill, mallPrice, myAdventures } from "kolmafia";
+import { Item, Skill, mallPrice, myAdventures } from "kolmafia";
 import { $effect, $item, $items, $skill, get, have } from "libram";
-
-function getLocation() {
-  return Location.get("Smoldering Bone Spikes");
-}
 
 function freeKillTask(
   fragment: Omit<CrimboTask, "do" | "sobriety" | "name" | "outfit" | "combat">,

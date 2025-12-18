@@ -28,7 +28,13 @@ import {
 } from "libram";
 
 import { MenuOptions, freeFightFamiliar } from "./familiar";
-import { args, realmAvailable, shouldPickpocket, sober } from "./lib";
+import {
+  args,
+  getLocation,
+  realmAvailable,
+  shouldPickpocket,
+  sober,
+} from "./lib";
 import { garboValue } from "./value";
 import { wanderer } from "./wanderer";
 
@@ -61,7 +67,7 @@ function mergeSpecs(...outfits: OutfitSpec[]): OutfitSpec {
 
 const adventuresFamiliars = (allowEquipment?: boolean) =>
   allowEquipment && have($item`gnomish housemaid's kgnee`)
-    ? $familiars`Temporal Riftlet, Reagnimated Gnome`
+    ? $familiars`Reagnimated Gnome, Temporal Riftlet`
     : $familiars`Temporal Riftlet`;
 const chooseFamiliar = (options: MenuOptions = {}): Familiar => {
   if (options.location?.zone === "Crimbo25") {
@@ -135,13 +141,7 @@ export function wandererOutfit(
     ),
     ifHave("back", $item`Buddy Bjorn`),
   );
-  const spec = mergeSpecs(
-    ifHave("hat", $item`Crown of Thrones`, () => !have($item`Buddy Bjorn`)),
-    weapons,
-    offhands,
-    backs,
-    { familiar },
-    famEquip,
+  const pants = mergeSpecs(
     ifHave(
       "pants",
       $item`designer sweatpants`,
@@ -154,6 +154,15 @@ export function wandererOutfit(
         get("_pantsgivingCount") < 50 ||
         (get("_pantsgivingFullness") < 2 && getRemainingStomach() === 0),
     ),
+  );
+  const spec = mergeSpecs(
+    ifHave("hat", $item`Crown of Thrones`, () => !have($item`Buddy Bjorn`)),
+    weapons,
+    offhands,
+    backs,
+    pants,
+    { familiar },
+    famEquip,
     { modifier: "Familiar Weight" },
   );
 
@@ -259,12 +268,12 @@ export function islandOutfit(
     baseSpec,
     new Error(`Failed to construct outfit from spec: ${baseSpec}`),
   );
-  const location = Location.get("Smoldering Bone Spikes");
+  const location = getLocation();
 
   outfit.familiar ??= chooseFamiliar({
     location: location,
     allowEquipment: true,
-    allowAttackFamiliars: fight === "regular",
+    allowAttackFamiliars: true,
   });
 
   if (outfit.familiar === $familiar`Reagnimated Gnome`)
@@ -302,16 +311,18 @@ export function islandOutfit(
   // if (get("_spikolodonSpikeUses") < 5)
   //   outfit.tryEquip({ shirt: $item`Jurassic Parka`, modes: { parka: "spikolodon" } });
 
-  mergeSpecs(
-    ifHave(
-      "pants",
-      $item`Pantsgiving`,
-      () =>
-        get("_pantsgivingCount") < 50 ||
-        (get("_pantsgivingFullness") < 2 && getRemainingStomach() === 0),
-    ),
-    ifHave("pants", $item`tearaway pants`, () =>
-      getMonsters(location).some(({ phylum }) => phylum === $phylum`plant`),
+  outfit.equip(
+    mergeSpecs(
+      ifHave(
+        "pants",
+        $item`Pantsgiving`,
+        () =>
+          get("_pantsgivingCount") < 50 ||
+          (get("_pantsgivingFullness") < 2 && getRemainingStomach() === 0),
+      ),
+      ifHave("pants", $item`tearaway pants`, () =>
+        getMonsters(location).some(({ phylum }) => phylum === $phylum`plant`),
+      ),
     ),
   );
 

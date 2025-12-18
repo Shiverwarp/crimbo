@@ -17,6 +17,7 @@ import {
 import {
   $familiar,
   $item,
+  $location,
   $stat,
   Counter,
   SourceTerminal,
@@ -66,6 +67,10 @@ export const args = Args.create(
     turns: Args.number({
       help: "The number of turns to run (use negative numbers for the number of turns remaining)",
       default: Infinity,
+    }),
+    location: Args.location({
+      help: "The location to adventure in.",
+      default: $location`Smoldering Fingerbones`,
     }),
     shrub: Args.boolean({
       help: "Whether to use the Crimbo Shrub when farming Crimbo zones.",
@@ -162,3 +167,7 @@ export const shouldPickpocket = () =>
   myInebriety() <= inebrietyLimit() &&
   canPickpocket() &&
   have($item`deft pirate hook`); // && unlikely to be the guy you can't pickpocket, I guess?
+
+export function getLocation() {
+  return args.location;
+}
