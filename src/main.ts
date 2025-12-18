@@ -1,6 +1,3 @@
-import { CrimboEngine } from "./engine";
-import { args, printh } from "./lib";
-import Tasks from "./tasks";
 import { Args } from "grimoire-kolmafia";
 import {
   $slots,
@@ -10,6 +7,10 @@ import {
   sinceKolmafiaRevision,
   withProperty,
 } from "libram";
+
+import { CrimboEngine } from "./engine";
+import { args, printh } from "./lib";
+import Tasks from "./tasks";
 
 export function main(command?: string) {
   Args.fill(args, command);
@@ -29,6 +30,7 @@ export function main(command?: string) {
   engine.print();
   const sessionStart = Session.current();
 
+  set(`currentMood`, `crimbo`);
   withProperty("recoveryScript", "", () => {
     try {
       engine.run();
