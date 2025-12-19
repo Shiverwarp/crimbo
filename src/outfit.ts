@@ -292,6 +292,10 @@ export function islandOutfit(
   if (shouldPickpocket() && myPrimestat() !== $stat`Moxie`)
     outfit.equip(ifHave("acc2", $item`mime army infiltration glove`));
 
+  if (myInebriety() > inebrietyLimit()) {
+    outfit.equip($item`wet shower curtain`);
+  }
+
   outfit.equip(
     mergeSpecs(
       ifHave(
@@ -314,11 +318,7 @@ export function islandOutfit(
   // Do we try other weapons? Saber?
   outfit.equip(
     mergeSpecs(
-      ifHave(
-        "weapon",
-        $item`undertakers' forceps`,
-        () => myInebriety() <= inebrietyLimit(),
-      ),
+      ifHave("weapon", $item`undertakers' forceps`),
       ifHave("weapon", $item`June cleaver`),
     ),
   );
