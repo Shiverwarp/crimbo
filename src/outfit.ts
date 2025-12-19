@@ -297,6 +297,7 @@ export function islandOutfit(
 
   if (myInebriety() > inebrietyLimit()) {
     outfit.equip($item`wet shower curtain`);
+    outfit.equip($item`barnacle-encrusted sweater`);
   }
 
   outfit.equip(
