@@ -38,6 +38,7 @@ import {
   TakerSpace,
   get,
   have,
+  set,
   uneffect,
 } from "libram";
 
@@ -113,6 +114,7 @@ export const SETUP_QUEST: Quest<CrimboTask> = {
       name: "Fight Lost",
       completed: () => !get("_lastCombatLost"),
       do: () => {
+        set("_lastCombatLost", "false");
         throw "We lost a fight! What went wrong?";
       },
       sobriety: "either",
