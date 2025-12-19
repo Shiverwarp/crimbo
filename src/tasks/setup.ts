@@ -107,6 +107,14 @@ export const SETUP_QUEST: Quest<CrimboTask> = {
       sobriety: "either",
     },
     {
+      name: "Fight Lost",
+      completed: () => !get("_lastCombatLost"),
+      do: () => {
+        throw "We lost a fight! What went wrong?";
+      },
+      sobriety: "either",
+    },
+    {
       name: "Recover MP",
       completed: () => myMp() >= Math.min(250, myMaxmp()),
       do: () => restoreMp(300),
