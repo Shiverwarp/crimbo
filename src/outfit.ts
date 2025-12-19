@@ -270,6 +270,13 @@ export function islandOutfit(
   );
   const location = getLocation();
 
+  const bestAccessories = getBestAccessories(location, false);
+  for (let i = 0; i < 3; i++) {
+    const accessory = bestAccessories[i];
+    if (!accessory) break;
+    outfit.equip(ifHave(`acc${i + 1}` as OutfitSlot, accessory));
+  }
+
   outfit.familiar ??= chooseFamiliar({
     location: location,
     allowEquipment: true,
@@ -305,7 +312,16 @@ export function islandOutfit(
     outfit.equip(ifHave("acc3", $item`mafia thumb ring`));
 
   // Do we try other weapons? Saber?
-  outfit.equip(ifHave("weapon", $item`June cleaver`));
+  outfit.equip(
+    mergeSpecs(
+      ifHave(
+        "weapon",
+        $item`undertakers' forceps`,
+        () => myInebriety() <= inebrietyLimit(),
+      ),
+      ifHave("weapon", $item`June cleaver`),
+    ),
+  );
 
   // We don't care about NCs yet
   // if (get("_spikolodonSpikeUses") < 5)
@@ -327,10 +343,12 @@ export function islandOutfit(
   );
 
   if (
-    $familiars`Peace Turkey, Temporal Riftlet, Reagnimated Gnome` as (
-      | Familiar
-      | undefined
-    )[]
+    (
+      $familiars`Peace Turkey, Temporal Riftlet, Reagnimated Gnome` as (
+        | Familiar
+        | undefined
+      )[]
+    ).includes(outfit.familiar)
   ) {
     outfit.modifier.push("1 Familiar Weight");
   } else {
