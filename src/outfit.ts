@@ -122,7 +122,6 @@ export function wandererOutfit(
     ifHave("weapon", $item`Fourth of May Cosplay Saber`),
   );
   const offhands = mergeSpecs(
-    ifHave("offhand", $item`carnivorous potted plant`),
     ifHave(
       "offhand",
       $item`cursed magnifying glass`,
@@ -307,6 +306,8 @@ export function islandOutfit(
         $item`Drunkula's wineglass`,
         () => myInebriety() > inebrietyLimit(),
       ),
+      // eslint-disable-next-line libram/verify-constants
+      ifHave("offhand", $item`bone-polishing rag`),
       ifHave(
         "offhand",
         $item`deft pirate hook`,
