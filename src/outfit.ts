@@ -74,13 +74,6 @@ const chooseFamiliar = (options: MenuOptions = {}): Familiar => {
       return $familiar`Crimbo Shrub`;
     if (SkeletonOfCrimboPast.have() && get("_knuckleboneDrops") < 100)
       return $familiar`Skeleton of Crimbo Past`;
-    if (
-      have($familiar`Left-Hand Man`) &&
-      have($item`bone-polishing rag`) &&
-      have($item`Drunkula's wineglass`) &&
-      !sober()
-    )
-      return $familiar`Left-Hand Man`;
 
     const adventuresFamiliar = adventuresFamiliars(options.allowEquipment).find(
       have,
@@ -136,10 +129,13 @@ export function taskOutfit(
 
   const famEquip = mergeSpecs(
     ifHave("famequip", equipmentFamiliars.get(familiar)),
-    ifHave("famequip", $item`tiny stillsuit`),
     ifHave("famequip", $item`amulet coin`),
   );
   outfit.equip(famEquip);
+
+  if (myInebriety() > inebrietyLimit()) {
+    outfit.equip($item`barnacle-encrusted sweater`);
+  }
 
   const weapon = mergeSpecs(
     ifHave("weapon", $item`undertakers' forceps`, isCrimboZone(location)),
