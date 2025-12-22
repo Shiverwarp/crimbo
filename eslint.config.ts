@@ -4,7 +4,7 @@ import libram, { verifyConstantsSinceRevision } from "eslint-plugin-libram";
 import { defineConfig } from "eslint/config";
 import tseslint from "typescript-eslint";
 
-await verifyConstantsSinceRevision(28806);
+await verifyConstantsSinceRevision(28818);
 
 export default defineConfig(
   {
@@ -17,7 +17,12 @@ export default defineConfig(
     rules: {
       "libram/verify-constants": [
         "error",
-        { data: { items: ["undertakers' forceps"] } },
+        {
+          data: {
+            items: [],
+            locations: [],
+          },
+        },
       ],
     },
   },

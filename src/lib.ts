@@ -1,6 +1,7 @@
 import { Args } from "grimoire-kolmafia";
 import {
   Item,
+  Location,
   canEquip,
   descToItem,
   inebrietyLimit,
@@ -70,7 +71,7 @@ export const args = Args.create(
     }),
     location: Args.location({
       help: "The location to adventure in.",
-      default: $location`Smoldering Fingerbones`,
+      default: $location`A Smoldering Pelvis`,
     }),
     shrub: Args.boolean({
       help: "Whether to use the Crimbo Shrub when farming Crimbo zones.",
@@ -170,4 +171,8 @@ export const shouldPickpocket = () =>
 
 export function getLocation() {
   return args.location;
+}
+
+export function isCrimboZone(location: Location): boolean {
+  return location.zone.startsWith("Crimbo");
 }
