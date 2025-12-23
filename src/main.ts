@@ -6,7 +6,6 @@ import {
   set,
   setDefaultMaximizeOptions,
   sinceKolmafiaRevision,
-  withProperty,
 } from "libram";
 
 import { defaultEffects, prebuff } from "./effects";
@@ -42,13 +41,11 @@ export function main(command?: string) {
   const sessionStart = Session.current();
 
   set(`currentMood`, `crimbo`);
-  withProperty("recoveryScript", "", () => {
-    try {
-      engine.run();
-    } finally {
-      engine.destruct();
-    }
-  });
+  try {
+    engine.run();
+  } finally {
+    engine.destruct();
+  }
 
   const sessionResults = Session.current().diff(sessionStart);
 
