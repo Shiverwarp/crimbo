@@ -1,17 +1,24 @@
 import { CrimboStrategy, CrimboTask } from "../engine";
+import { sober } from "../lib";
 import Macro from "../macro";
 import { taskOutfit } from "../outfit";
+import { garboValue } from "../value";
 import { wanderer } from "../wanderer";
 import { Quest } from "grimoire-kolmafia";
 import {
+  Item,
   canAdventure,
   inebrietyLimit,
+  itemAmount,
+  myAscensions,
   myClass,
   myInebriety,
+  retrieveItem,
   totalTurnsPlayed,
 } from "kolmafia";
 import {
   $class,
+  $familiar,
   $item,
   $items,
   $location,
@@ -20,9 +27,27 @@ import {
   get,
   getKramcoWandererChance,
   have,
+  maxBy,
+  withProperty,
 } from "libram";
 
 let digitizes = get("_sourceTerminalDigitizeMonsterCount");
+
+let bestDupeItem: Item | null = null;
+function getBestDupeItem(): Item {
+  if (bestDupeItem === null || !have(bestDupeItem)) {
+    // Machine elf can dupe PVPable food, booze, spleen item or potion
+    const validItems = Item.all().filter(
+      (i) =>
+        i.tradeable &&
+        i.discardable &&
+        (i.inebriety || i.fullness || i.potion || i.spleen) &&
+        have(i),
+    );
+    bestDupeItem = maxBy(validItems, garboValue);
+  }
+  return bestDupeItem;
+}
 
 export const GLOBAL_QUEST: Quest<CrimboTask> = {
   name: "Merry Crimbo!",
@@ -156,6 +181,37 @@ export const GLOBAL_QUEST: Quest<CrimboTask> = {
       choices: () => wanderer().getChoices("wanderer"),
       sobriety: "either",
       combat: new CrimboStrategy(() => Macro.standardCombat()),
+    },
+    {
+      name: "Machine Elf Dupe",
+      ready: () =>
+        have($familiar`Machine Elf`) &&
+        // Dupe at end of day even if not ascending, encountersUntilDMTChoice does not reset on rollover
+        myInebriety() > inebrietyLimit() &&
+        get("encountersUntilDMTChoice") === 0 &&
+        garboValue(getBestDupeItem()) > get("valueOfAdventure"),
+      completed: () => get("lastDMTDuplication") === myAscensions(),
+      do: $location`The Deep Machine Tunnels`,
+      prepare: () => {
+        if (itemAmount(getBestDupeItem()) === 0) {
+          withProperty("autoSatisfyWithMall", false, () =>
+            retrieveItem(getBestDupeItem()),
+          );
+        }
+      },
+      outfit: () =>
+        sober()
+          ? {
+              avoid: $items`Kramco Sausage-o-Matic™`,
+              familiar: $familiar`Machine Elf`,
+            }
+          : {
+              offhand: $item`Drunkula's wineglass`,
+              familiar: $familiar`Machine Elf`,
+            },
+      combat: new CrimboStrategy(() => Macro.abort()),
+      sobriety: "drunk",
+      choices: () => ({ 1119: 4, 1125: `1&iid=${getBestDupeItem().id}` }),
     },
   ],
 };
