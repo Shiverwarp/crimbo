@@ -186,8 +186,6 @@ export const GLOBAL_QUEST: Quest<CrimboTask> = {
       name: "Machine Elf Dupe",
       ready: () =>
         have($familiar`Machine Elf`) &&
-        // Dupe at end of day even if not ascending, encountersUntilDMTChoice does not reset on rollover
-        myInebriety() > inebrietyLimit() &&
         get("encountersUntilDMTChoice") === 0 &&
         garboValue(getBestDupeItem()) > get("valueOfAdventure"),
       completed: () => get("lastDMTDuplication") === myAscensions(),
@@ -210,7 +208,7 @@ export const GLOBAL_QUEST: Quest<CrimboTask> = {
               familiar: $familiar`Machine Elf`,
             },
       combat: new CrimboStrategy(() => Macro.abort()),
-      sobriety: "drunk",
+      sobriety: "either",
       choices: () => ({ 1119: 4, 1125: `1&iid=${getBestDupeItem().id}` }),
     },
   ],
